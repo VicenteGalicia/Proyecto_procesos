@@ -1,4 +1,4 @@
-# Proyecto_procesos
+# Proyecto|procesos
 videojuego de simulador de batalla 2D, usando java FXGL
 ---
 Integrantes del equipo
