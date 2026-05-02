@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class BattleSimulatorApp extends GameApplication {
 
@@ -92,14 +93,58 @@ public class BattleSimulatorApp extends GameApplication {
     private void iniciarBatalla()
     {
         FXGL.removeUINode(menu);
-        FXGL.getGameScene().setBackgroundColor(Color.rgb(20, 20, 40));
+        //FXGL.getGameScene().setBackgroundColor(Color.rgb(20, 20, 40));
+        var fondo = FXGL.texture("coliseo.png");
+        fondo.setFitWidth(1024);
+        fondo.setFitHeight(768);
 
-        Text batallaTexto = new Text("⚔️ " + jugador1.getNombre() + " VS " + jugador2.getNombre() + " ⚔️");
+        //  bajar brillo
+        fondo.setOpacity(1);
+        FXGL.entityBuilder()
+                .at(0, 0)
+                .view(fondo)
+                .zIndex(-100)
+                .buildAndAttach();
+
+//  capa oscura ligera (ESTO es lo correcto)
+        var overlay = new javafx.scene.shape.Rectangle(1024, 768);
+        overlay.setFill(javafx.scene.paint.Color.color(0, 0, 0, 0.15));
+
+        FXGL.entityBuilder()
+                .at(0, 0)
+                .view(overlay)
+                .zIndex(-50) // encima del fondo pero atrás de personajes
+                .buildAndAttach();
+
+        //FXGL.addUINode(overlay);
+       Text batallaTexto = new Text("⚔️ " + jugador1.getNombre() + " VS " + jugador2.getNombre() + " ⚔️");
         batallaTexto.setFont(Font.font(20));
-        batallaTexto.setFill(Color.YELLOW);
+        batallaTexto.setFill(Color.GOLD);
+        batallaTexto.setStroke(Color.SILVER);
+        batallaTexto.setStrokeWidth(2);
         batallaTexto.setLayoutX(350);
         batallaTexto.setLayoutY(50);
         FXGL.addUINode(batallaTexto);
+
+        //VIDA
+        Text vidaLabel1 = new Text("VIDA");
+        vidaLabel1.setFill(Color.WHITE);
+        vidaLabel1.setStroke(Color.BLACK);
+        vidaLabel1.setStrokeWidth(1.5);
+        vidaLabel1.setLayoutX(80);
+        vidaLabel1.setLayoutY(65);
+
+        FXGL.addUINode(vidaLabel1);
+
+        //VIDA2
+        Text vidaLabel2 = new Text("VIDA");
+        vidaLabel2.setFill(Color.WHITE);
+        vidaLabel2.setStroke(Color.BLACK);
+        vidaLabel2.setStrokeWidth(1.5);
+        vidaLabel2.setLayoutX(700);
+        vidaLabel2.setLayoutY(65);
+
+        FXGL.addUINode(vidaLabel2);
 
         String tipo1 = getTipoSprite(jugador1);
         String tipo2 = getTipoSprite(jugador2);
@@ -108,8 +153,8 @@ public class BattleSimulatorApp extends GameApplication {
         PersonajeVisual visual2 = new PersonajeVisual(jugador2, tipo2);
 
         //medio misma escala vertical
-        double yPos1 = 350;
-        double yPos2 = 400;
+        double yPos1 = 600;  //para mover los luchadores
+        double yPos2 = 600;
 
         entity1 = FXGL.entityBuilder()
                 .at(250, yPos1)
@@ -119,8 +164,8 @@ public class BattleSimulatorApp extends GameApplication {
 
         // Escala del primer personaje
         entity1.getViewComponent().getChildren().forEach(node -> {
-            node.setScaleX(2.5);
-            node.setScaleY(2.5);
+            node.setScaleX(3);
+            node.setScaleY(3);
         });
         //guarda la escala
         visual1.setEscala(2.5, 2.5);
@@ -141,43 +186,78 @@ public class BattleSimulatorApp extends GameApplication {
 
         FXGL.getGameWorld().addEntity(entity1);
         FXGL.getGameWorld().addEntity(entity2);
-
+/*
         Text nombre1 = new Text(jugador1.getNombre());
         nombre1.setFont(Font.font(18));
-        nombre1.setFill(Color.WHITE);
-        nombre1.setLayoutX(220);
-        nombre1.setLayoutY(550);
+        nombre1.setFill(Color.BLACK);
+        nombre1.setLayoutX(80);
+        nombre1.setLayoutY(67); // para subir batalla entre
 
         Text nombre2 = new Text(jugador2.getNombre());
         nombre2.setFont(Font.font(18));
         nombre2.setFill(Color.WHITE);
-        nombre2.setLayoutX(670);
-        nombre2.setLayoutY(550);
+        nombre2.setLayoutX(600);
+        nombre2.setLayoutY(67);
 
-        FXGL.addUINode(nombre1);
-        FXGL.addUINode(nombre2);
+       // FXGL.addUINode(nombre1);
+        FXGL.addUINode(nombre2);*/
+// barra de fondo
+        Rectangle barraFondo1 = new Rectangle(200, 20);
+        barraFondo1.setFill(Color.DARKRED);
+        barraFondo1.setLayoutX(80);
+        barraFondo1.setLayoutY(80);
 
-        Text vida1 = new Text("❤️ " + (int)jugador1.getVida() + "/" + (int)jugador1.getVidaMaxima());
-        vida1.setFont(Font.font(14));
-        vida1.setFill(Color.RED);
-        vida1.setLayoutX(220);
-        vida1.setLayoutY(580);
+        Rectangle barraVida1 = new Rectangle(200, 20);
+        barraVida1.setFill(Color.LIMEGREEN);
+        barraVida1.setLayoutX(80);
+        barraVida1.setLayoutY(80);
 
-        Text vida2 = new Text("❤️ " + (int)jugador2.getVida() + "/" + (int)jugador2.getVidaMaxima());
-        vida2.setFont(Font.font(14));
-        vida2.setFill(Color.RED);
-        vida2.setLayoutX(670);
-        vida2.setLayoutY(580);
+        FXGL.addUINode(barraFondo1);
+        FXGL.addUINode(barraVida1);
+//texto de vida================
+        Text vidaTexto1 = new Text();
+        vidaTexto1.setFill(Color.WHITE);
+        vidaTexto1.setStroke(Color.BLACK);
+        vidaTexto1.setLayoutX(80);
+        vidaTexto1.setLayoutY(95);
 
-        FXGL.addUINode(vida1);
-        FXGL.addUINode(vida2);
+        FXGL.addUINode(vidaTexto1);
+
+
+
+        Rectangle barraFondo2 = new Rectangle(200, 20);
+        barraFondo2.setFill(Color.DARKRED);
+        barraFondo2.setLayoutX(700);
+        barraFondo2.setLayoutY(80);
+
+        Rectangle barraVida2 = new Rectangle(200, 20);
+        barraVida2.setFill(Color.LIMEGREEN);
+        barraVida2.setLayoutX(700);
+        barraVida2.setLayoutY(80);
+
+        FXGL.addUINode(barraFondo2);
+        FXGL.addUINode(barraVida2);
+        //texto de vida=========================
+        Text vidaTexto2 = new Text();
+        vidaTexto2.setFill(Color.WHITE);
+        vidaTexto2.setStroke(Color.BLACK);
+        vidaTexto2.setLayoutX(700);
+        vidaTexto2.setLayoutY(95);
+
+        FXGL.addUINode(vidaTexto2);
 
         simulador = new SimuladorBatallaLogica(jugador1, visual1, jugador2, visual2);
 
         javafx.animation.Timeline updateUI = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.1), e -> {
-                    vida1.setText("❤️ " + (int)jugador1.getVida() + "/" + (int)jugador1.getVidaMaxima());
-                    vida2.setText("❤️ " + (int)jugador2.getVida() + "/" + (int)jugador2.getVidaMaxima());
+                    double porcentaje1 = jugador1.getVida() / jugador1.getVidaMaxima();
+                    double porcentaje2 = jugador2.getVida() / jugador2.getVidaMaxima();
+
+                    barraVida1.setWidth(200 * porcentaje1);
+                    barraVida2.setWidth(200 * porcentaje2);
+
+                    vidaTexto1.setText((int)jugador1.getVida() + "/" + (int)jugador1.getVidaMaxima());
+                    vidaTexto2.setText((int)jugador2.getVida() + "/" + (int)jugador2.getVidaMaxima());
                 })
         );
         updateUI.setCycleCount(javafx.animation.Timeline.INDEFINITE);
@@ -195,17 +275,30 @@ public class BattleSimulatorApp extends GameApplication {
     {
         Button revancha = new Button("⚔️ REVANCHA ⚔️");
         revancha.setStyle("-fx-font-size: 18px; -fx-min-width: 200px; -fx-min-height: 50px;");
-        revancha.setLayoutX(412);
+        revancha.setLayoutX(300);
         revancha.setLayoutY(650);
 
+        Button salir = new Button("❌ SALIR ❌");
+        salir.setStyle("-fx-font-size: 18px; -fx-min-width: 200px; -fx-min-height: 50px;");
+        salir.setLayoutX(550);
+        salir.setLayoutY(650);
+
+        // Acción revancha
         revancha.setOnAction(e -> {
             FXGL.getGameWorld().removeEntity(entity1);
             FXGL.getGameWorld().removeEntity(entity2);
-            FXGL.getGameScene().getUINodes().clear();
+            // limpiar pantalla correctamente
+            FXGL.getGameScene().clearUINodes();
             mostrarMenuSeleccion();
         });
 
+        // Acción salir
+        salir.setOnAction(e -> {
+            FXGL.getGameController().exit(); //  CIERRA EL JUEGO
+        });
+
         FXGL.addUINode(revancha);
+        FXGL.addUINode(salir);
     }
 
     private String getTipoSprite(Personaje personaje)
