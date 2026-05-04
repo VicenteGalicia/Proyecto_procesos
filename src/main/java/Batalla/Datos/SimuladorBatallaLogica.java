@@ -30,11 +30,7 @@ public class SimuladorBatallaLogica {
 
     public void iniciarBatalla()
     {
-        FXGL.getGameScene().getUINodes().stream()
-                .filter(node -> node instanceof javafx.scene.text.Text)
-                .forEach(node -> ((javafx.scene.text.Text) node).setText(
-                        "¡Batalla entre " + personaje1.getNombre() + " y " + personaje2.getNombre() + "!"
-                ));
+
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1.2), e -> {
             if (!batallaActiva) return;

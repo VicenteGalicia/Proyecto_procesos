@@ -40,12 +40,22 @@ public class BattleSimulatorApp extends GameApplication {
     private void mostrarMenuSeleccion()
     {
         menu = new VBox(15);
-        menu.setLayoutX(362);
-        menu.setLayoutY(250);
+        menu.setLayoutX(395);
+        menu.setLayoutY(200);
 
-        Text titulo = new Text("⚔️ SELECCIONA DOS PERSONAJES ⚔️");
-        titulo.setFont(Font.font(24));
-        titulo.setFill(Color.GOLD);
+
+        //cambia el fondo del inicio en este caso puse con  morado
+        FXGL.getGameScene().setBackgroundColor(Color.rgb(15, 15, 25));
+
+
+        Text titulo = new Text("SELECCIONA TUS DOS GUERREROS ");
+        titulo.setFont(Font.font(30));
+        titulo.setFill(Color.BLACK);
+
+        titulo.setStroke(Color.BLUEVIOLET);
+        titulo.setStrokeWidth(2);
+
+
 
         Button btnCaballero = crearBotonPersonaje("Caballero");
         Button btnChino = crearBotonPersonaje("Chino");
@@ -120,16 +130,16 @@ public class BattleSimulatorApp extends GameApplication {
        Text batallaTexto = new Text("⚔️ " + jugador1.getNombre() + " VS " + jugador2.getNombre() + " ⚔️");
         batallaTexto.setFont(Font.font(20));
         batallaTexto.setFill(Color.GOLD);
-        batallaTexto.setStroke(Color.SILVER);
+        batallaTexto.setStroke(Color.WHITE);
         batallaTexto.setStrokeWidth(2);
-        batallaTexto.setLayoutX(350);
+        batallaTexto.setLayoutX(390);
         batallaTexto.setLayoutY(50);
         FXGL.addUINode(batallaTexto);
 
         //VIDA
         Text vidaLabel1 = new Text("VIDA");
         vidaLabel1.setFill(Color.WHITE);
-        vidaLabel1.setStroke(Color.BLACK);
+        vidaLabel1.setStroke(Color.WHITE);
         vidaLabel1.setStrokeWidth(1.5);
         vidaLabel1.setLayoutX(80);
         vidaLabel1.setLayoutY(65);
@@ -139,7 +149,7 @@ public class BattleSimulatorApp extends GameApplication {
         //VIDA2
         Text vidaLabel2 = new Text("VIDA");
         vidaLabel2.setFill(Color.WHITE);
-        vidaLabel2.setStroke(Color.BLACK);
+        vidaLabel2.setStroke(Color.WHITE);
         vidaLabel2.setStrokeWidth(1.5);
         vidaLabel2.setLayoutX(700);
         vidaLabel2.setLayoutY(65);
@@ -170,37 +180,36 @@ public class BattleSimulatorApp extends GameApplication {
         //guarda la escala
         visual1.setEscala(2.5, 2.5);
 
+
+
+        double xPos2 = 700;
+
+//  compensar el flip (MUY IMPORTANTE)
+        if (!tipo2.equals("panda")) {
+            xPos2 += 120; // mueve hacia la derecha cuando está volteado
+        }
+
         entity2 = FXGL.entityBuilder()
-                .at(700, yPos2)
+                .at(xPos2, yPos2)
                 .view(visual2.getTexture())
                 .with(visual2)
                 .build();
 
-        // Escala y volteo del segundo personaje
-        entity2.getViewComponent().getChildren().forEach(node -> {
-            node.setScaleX(-2.5);
-            node.setScaleY(2.5);
-        });
+        if (tipo2.equals("panda")) {
+            entity2.getViewComponent().getChildren().get(0).setScaleX(-2.5);
+        } else {
+            entity2.getViewComponent().getChildren().get(0).setScaleX(-2.5);
+        }
         //guarda escala y negativo
-        visual2.setEscala(-2.5, 2.5);
+        if (tipo2.equals("panda")) {
+            visual2.setEscala(2.5, 2.5);
+        } else {
+            visual2.setEscala(-2.5, 2.5);
+        }
 
         FXGL.getGameWorld().addEntity(entity1);
         FXGL.getGameWorld().addEntity(entity2);
-/*
-        Text nombre1 = new Text(jugador1.getNombre());
-        nombre1.setFont(Font.font(18));
-        nombre1.setFill(Color.BLACK);
-        nombre1.setLayoutX(80);
-        nombre1.setLayoutY(67); // para subir batalla entre
 
-        Text nombre2 = new Text(jugador2.getNombre());
-        nombre2.setFont(Font.font(18));
-        nombre2.setFill(Color.WHITE);
-        nombre2.setLayoutX(600);
-        nombre2.setLayoutY(67);
-
-       // FXGL.addUINode(nombre1);
-        FXGL.addUINode(nombre2);*/
 // barra de fondo
         Rectangle barraFondo1 = new Rectangle(200, 20);
         barraFondo1.setFill(Color.DARKRED);
@@ -273,12 +282,12 @@ public class BattleSimulatorApp extends GameApplication {
 
     private void mostrarBotonRevancha()
     {
-        Button revancha = new Button("⚔️ REVANCHA ⚔️");
+        Button revancha = new Button(" REVANCHA ");
         revancha.setStyle("-fx-font-size: 18px; -fx-min-width: 200px; -fx-min-height: 50px;");
         revancha.setLayoutX(300);
         revancha.setLayoutY(650);
 
-        Button salir = new Button("❌ SALIR ❌");
+        Button salir = new Button(" SALIR ");
         salir.setStyle("-fx-font-size: 18px; -fx-min-width: 200px; -fx-min-height: 50px;");
         salir.setLayoutX(550);
         salir.setLayoutY(650);
