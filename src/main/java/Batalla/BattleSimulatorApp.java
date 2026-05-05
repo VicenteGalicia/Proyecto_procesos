@@ -172,11 +172,7 @@ public class BattleSimulatorApp extends GameApplication {
                 .with(visual1)
                 .build();
 
-        // Escala del primer personaje
-        entity1.getViewComponent().getChildren().forEach(node -> {
-            node.setScaleX(3);
-            node.setScaleY(3);
-        });
+
         //guarda la escala
         visual1.setEscala(2.5, 2.5);
 
@@ -185,7 +181,7 @@ public class BattleSimulatorApp extends GameApplication {
         double xPos2 = 700;
 
 //  compensar el flip (MUY IMPORTANTE)
-        if (!tipo2.equals("panda")) {
+        if (tipo2.equals("panda")) {
             xPos2 += 120; // mueve hacia la derecha cuando está volteado
         }
 
@@ -195,17 +191,18 @@ public class BattleSimulatorApp extends GameApplication {
                 .with(visual2)
                 .build();
 
-        if (tipo2.equals("panda")) {
-            entity2.getViewComponent().getChildren().get(0).setScaleX(-2.5);
-        } else {
-            entity2.getViewComponent().getChildren().get(0).setScaleX(-2.5);
-        }
-        //guarda escala y negativo
-        if (tipo2.equals("panda")) {
-            visual2.setEscala(2.5, 2.5);
-        } else {
-            visual2.setEscala(-2.5, 2.5);
-        }
+// ─── Jugador 1 (izquierda, debe mirar a la DERECHA) ───
+        boolean pandaEs1 = tipo1.equals("panda");
+        double escalaX1 = pandaEs1 ? -2.5 : 2.5; // panda ya mira izq → flip
+        entity1.getViewComponent().getChildren().get(0).setScaleX(escalaX1);
+        visual1.setEscala(escalaX1, 2.5);
+
+// ─── Jugador 2 (derecha, debe mirar a la IZQUIERDA) ───
+        boolean pandaEs2 = tipo2.equals("panda");
+        double escalaX2 = pandaEs2 ? 2.5 : -2.5; // panda ya mira izq → no flip
+        entity2.getViewComponent().getChildren().get(0).setScaleX(escalaX2);
+        visual2.setEscala(escalaX2, 2.5);
+
 
         FXGL.getGameWorld().addEntity(entity1);
         FXGL.getGameWorld().addEntity(entity2);
