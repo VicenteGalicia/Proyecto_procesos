@@ -6,12 +6,14 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 
 public class BattleSimulatorApp extends GameApplication {
 
@@ -40,20 +42,22 @@ public class BattleSimulatorApp extends GameApplication {
     private void mostrarMenuSeleccion()
     {
         menu = new VBox(15);
-        menu.setLayoutX(395);
+        menu.setLayoutX((FXGL.getAppWidth()-500)/2);
         menu.setLayoutY(200);
+        menu.setAlignment(Pos.TOP_CENTER);
 
 
         //cambia el fondo del inicio en este caso puse con  morado
         FXGL.getGameScene().setBackgroundColor(Color.rgb(15, 15, 25));
 
 
+       // Font pixel=Font.loadFont(getClass().getResourceAsStream("pixel.ttf"),32);
         Text titulo = new Text("SELECCIONA TUS DOS GUERREROS ");
         titulo.setFont(Font.font(30));
         titulo.setFill(Color.BLACK);
-
         titulo.setStroke(Color.BLUEVIOLET);
         titulo.setStrokeWidth(2);
+        titulo.setTextAlignment(TextAlignment.CENTER);
 
 
 
@@ -104,7 +108,7 @@ public class BattleSimulatorApp extends GameApplication {
     {
         FXGL.removeUINode(menu);
         //FXGL.getGameScene().setBackgroundColor(Color.rgb(20, 20, 40));
-        var fondo = FXGL.texture("coliseo.png");
+        var fondo = FXGL.texture("C.png");
         fondo.setFitWidth(1024);
         fondo.setFitHeight(768);
 
@@ -127,13 +131,14 @@ public class BattleSimulatorApp extends GameApplication {
                 .buildAndAttach();
 
         //FXGL.addUINode(overlay);
-       Text batallaTexto = new Text("⚔️ " + jugador1.getNombre() + " VS " + jugador2.getNombre() + " ⚔️");
+       Text batallaTexto = new Text(jugador1.getNombre() + " VS " + jugador2.getNombre());
         batallaTexto.setFont(Font.font(20));
         batallaTexto.setFill(Color.GOLD);
         batallaTexto.setStroke(Color.WHITE);
         batallaTexto.setStrokeWidth(2);
         batallaTexto.setLayoutX(390);
         batallaTexto.setLayoutY(50);
+        batallaTexto.setTextAlignment(TextAlignment.CENTER);
         FXGL.addUINode(batallaTexto);
 
         //VIDA
