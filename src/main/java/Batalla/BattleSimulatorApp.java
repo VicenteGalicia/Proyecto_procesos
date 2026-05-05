@@ -15,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
+import java.io.InputStream;
+
 public class BattleSimulatorApp extends GameApplication {
 
     private Personaje jugador1;
@@ -39,6 +41,22 @@ public class BattleSimulatorApp extends GameApplication {
         mostrarMenuSeleccion();
     }
 
+    private Font cargarFuentePersonalizada(String ruta, double tamano) {
+        try {
+            // Carga la fuente desde los recursos
+            InputStream fontStream = getClass().getResourceAsStream(ruta);
+            if (fontStream == null) {
+                System.err.println("No se encontró la fuente en: " + ruta);
+                return Font.font(tamano); // Fuente por defecto
+            }
+            Font fuentePersonalizada = Font.loadFont(fontStream, tamano);
+            return fuentePersonalizada;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Font.font(tamano); // Fallback a fuente por defecto
+        }
+    }
+
     private void mostrarMenuSeleccion()
     {
         menu = new VBox(15);
@@ -50,11 +68,13 @@ public class BattleSimulatorApp extends GameApplication {
         //cambia el fondo del inicio en este caso puse con  morado
         FXGL.getGameScene().setBackgroundColor(Color.rgb(15, 15, 25));
 
+        Font pixel=cargarFuentePersonalizada("/assets/fonts/pixel.ttf",32);  //pixel es para titulo
+        Font pixelmultiusos=cargarFuentePersonalizada("/assets/fonts/pixel.ttf",22); //multiusos todo lo demas
 
-       // Font pixel=Font.loadFont(getClass().getResourceAsStream("pixel.ttf"),32);
+
         Text titulo = new Text("SELECCIONA TUS DOS GUERREROS ");
-        titulo.setFont(Font.font(30));
-        titulo.setFill(Color.BLACK);
+        titulo.setFont(pixel);
+        titulo.setFill(Color.WHITE);
         titulo.setStroke(Color.BLUEVIOLET);
         titulo.setStrokeWidth(2);
         titulo.setTextAlignment(TextAlignment.CENTER);
@@ -67,8 +87,8 @@ public class BattleSimulatorApp extends GameApplication {
         Button btnPanda = crearBotonPersonaje("Panda");
         Button btnNinja = crearBotonPersonaje("Ninja");
 
-        estadoTexto = new Text("🔹 Selecciona el primer personaje 🔹");
-        estadoTexto.setFont(Font.font(16));
+        estadoTexto = new Text("Selecciona el primer personaje");
+        estadoTexto.setFont(pixelmultiusos);
         estadoTexto.setFill(Color.WHITE);
 
         final Personaje[] seleccionado = {null};
@@ -95,7 +115,7 @@ public class BattleSimulatorApp extends GameApplication {
         btn.setOnAction(e -> {
             if (seleccionado[0] == null) {
                 seleccionado[0] = crearPersonaje.get();
-                estadoTexto.setText("✅ Primer personaje: " + seleccionado[0].getNombre() + " - Selecciona el segundo");
+                estadoTexto.setText("Primer personaje: " + seleccionado[0].getNombre() + " - Selecciona el segundo");
             } else {
                 jugador1 = seleccionado[0];
                 jugador2 = crearPersonaje.get();
@@ -130,11 +150,12 @@ public class BattleSimulatorApp extends GameApplication {
                 .zIndex(-50) // encima del fondo pero atrás de personajes
                 .buildAndAttach();
 
+        Font pixelmultiusos=cargarFuentePersonalizada("/assets/fonts/pixel.ttf",45); //se declara aqui porque no lo encuentra
         //FXGL.addUINode(overlay);
-       Text batallaTexto = new Text(jugador1.getNombre() + " VS " + jugador2.getNombre());
-        batallaTexto.setFont(Font.font(20));
-        batallaTexto.setFill(Color.GOLD);
-        batallaTexto.setStroke(Color.WHITE);
+        Text batallaTexto = new Text(jugador1.getNombre() + " VS " + jugador2.getNombre());
+        batallaTexto.setFont(pixelmultiusos); //carga texto
+        batallaTexto.setFill(Color.WHITE);
+        batallaTexto.setStroke(Color.CRIMSON);
         batallaTexto.setStrokeWidth(2);
         batallaTexto.setLayoutX(390);
         batallaTexto.setLayoutY(50);
