@@ -163,7 +163,7 @@ public class BattleSimulatorApp extends GameApplication {
         FXGL.addUINode(batallaTexto);
 
         //VIDA
-        Text vidaLabel1 = new Text("VIDA");
+        Text vidaLabel1 = new Text(jugador1.getNombre()+" HP");
         vidaLabel1.setFill(Color.WHITE);
         vidaLabel1.setStroke(Color.WHITE);
         vidaLabel1.setStrokeWidth(1.5);
@@ -173,7 +173,7 @@ public class BattleSimulatorApp extends GameApplication {
         FXGL.addUINode(vidaLabel1);
 
         //VIDA2
-        Text vidaLabel2 = new Text("VIDA");
+        Text vidaLabel2 = new Text(jugador2.getNombre()+" HP");
         vidaLabel2.setFill(Color.WHITE);
         vidaLabel2.setStroke(Color.WHITE);
         vidaLabel2.setStrokeWidth(1.5);
