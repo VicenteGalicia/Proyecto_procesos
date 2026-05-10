@@ -10,7 +10,7 @@ public class Chino extends Personaje
                  15,
                  1.5,
                  0.15,
-                 0.10,
+                 0.20,
                  0.15);
     }
 }

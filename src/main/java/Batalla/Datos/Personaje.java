@@ -16,7 +16,7 @@ public abstract class Personaje
     protected double probabilidadHuir; // 0.0 a 1
     protected double probabilidadFallar; // 0.0 a 1
 
-    protected boolean isHuyendo=false;
+    protected boolean isHuyendo;
     private boolean defendiendo=false;
 
     public Personaje(String nombre, double vidaMaxima, double ataque, double defensa,
@@ -194,7 +194,7 @@ public abstract class Personaje
     public boolean intentarHuir()
     {
         double porcentajeVida=vida.get()/vidaMaxima;
-        if(porcentajeVida<=0.20)
+        if(porcentajeVida<=0.99)
         {
             isHuyendo=Math.random()<probabilidadHuir;
             return isHuyendo;
