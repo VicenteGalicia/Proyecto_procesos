@@ -187,7 +187,7 @@ public abstract class Personaje
             damageFinal=damage*0.5;
             defendiendo=false; //solo dura un turno
         }
-        double nuevaVida=vida.get()-damage;
+        double nuevaVida=vida.get()-damageFinal;
         vida.set(Math.max(0,nuevaVida));
     }
 
@@ -223,7 +223,7 @@ public abstract class Personaje
 
     public boolean ataqueFalla()
     {
-        return Math.random()<probabilidadFallar;
+        return Math.random() < probabilidadFallar;
     }
 
     public Accion decidirAccion() {

@@ -309,15 +309,7 @@ public class BattleSimulatorApp extends GameApplication {
 
     private String getTipoSprite(Personaje personaje)
     {
-        String className = personaje.getClass().getSimpleName().toLowerCase();
-        switch (className) {
-            case "caballero": return "caballero";
-            case "chino": return "chino";
-            case "demon": return "demon";
-            case "panda": return "panda";
-            case "ninja": return "ninja";
-            default: return "caballero";
-        }
+        return personaje.getClass().getSimpleName().toLowerCase();
     }
 
     public static void main(String[] args) {
