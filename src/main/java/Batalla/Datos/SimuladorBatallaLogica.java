@@ -1,10 +1,7 @@
 package Batalla.Datos;
 
-import Batalla.Datos.stats.PlayerStat;
 import Batalla.Visual.PersonajeVisual;
 import Utility_IA.BattleContext;
-
-import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -57,8 +54,8 @@ public class SimuladorBatallaLogica {
 
     //calculates the next player's next move based on the current battle context
     public void nextTurn(Personaje characterInTurn, Personaje opponentCharacter){
-        BattleContext currentContext = new BattleContext(new ArrayList<PlayerStat>(opponentCharacter.getStats().values()), 
-                                                        new ArrayList<PlayerStat>(characterInTurn.getStats().values()));
+        BattleContext currentContext = new BattleContext(opponentCharacter.getStats(), 
+                                                        characterInTurn.getStats());
         characterInTurn.chooseAction(currentContext);
         characterInTurn.executeCurrentAction();
     }
@@ -121,13 +118,13 @@ public class SimuladorBatallaLogica {
 
     private void verificarVictoria()
     {
-        if (!personaje1.estaVivo()) {
+        if (!personaje1.estaVivo() || personaje1.getIsFlee()) {
             personaje1.getTexture().animarMuerte();
             System.out.println("\n🏆 ¡" + personaje2.getNombre() + " es el GANADOR! 🏆");
             batallaActiva = false;
             timeline.stop();
             if (onBatallaTerminada != null) onBatallaTerminada.run();
-        } else if (!personaje2.estaVivo()) {
+        } else if (!personaje2.estaVivo() || personaje2.getIsFlee()) {
             personaje2.getTexture().animarMuerte();
             System.out.println("\n🏆 ¡" + personaje1.getNombre() + " es el GANADOR! 🏆");
             batallaActiva = false;

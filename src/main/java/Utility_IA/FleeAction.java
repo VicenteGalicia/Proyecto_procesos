@@ -10,11 +10,31 @@ public class FleeAction extends PlayerAction {
 
     @Override
     public float calculateUsefulness(BattleContext currentContext){
-        return (float)Math.random();
+        float finalUsefulness = 0.f;
+
+        float meMaxHealt = currentContext.getMeStatsSpecific("vida").getMaxValue();
+        float meCurrentDefense = currentContext.getMeStatsSpecific("defensa").getCurrentValue();
+        float meCurrentHealt = currentContext.getMeStatsSpecific("vida").getCurrentValue();
+
+        float enemyCurrentAttack = currentContext.getEnemyStatsSpecific("ataque").getCurrentValue();
+
+        float maxSurvivalPer = meMaxHealt / (enemyCurrentAttack - meCurrentDefense);
+
+        float survivalPer = meCurrentHealt / (enemyCurrentAttack - meCurrentDefense);
+
+        finalUsefulness =  1 - (survivalPer / maxSurvivalPer);
+
+        float fleePer = currentContext.getMeStatsSpecific("Phuir").getCurrentValue();
+        if( Math.random() < fleePer){
+            finalUsefulness += 0.01;
+        }
+
+        return finalUsefulness;
     }
 
     @Override
     public void executeAction(Personaje me, Personaje opponent){
+        me.setFlee(true);
         System.out.println("Huyendo");
     };
 

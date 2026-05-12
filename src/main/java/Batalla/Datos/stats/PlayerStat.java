@@ -31,6 +31,10 @@ public class PlayerStat {
         currentValue = newCurrentValue;
     }
 
+    public float getPorcentage(){
+        return (float)(currentValue / maxValue);    
+    }
+
     @Override
     public String toString(){
         return name + "= [\n" +  

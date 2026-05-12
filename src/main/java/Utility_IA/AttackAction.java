@@ -14,7 +14,19 @@ public class AttackAction extends PlayerAction{
 
     @Override
     public float calculateUsefulness(BattleContext currentContext){
-        return (float)Math.random();
+        float finalUsefulness = 0.f;
+        //normalized values
+        float enemyDefense = currentContext.getEnemyStatsSpecific("defensa").getCurrentValue();
+        float enemyHealtPorcentage = currentContext.getEnemyStatsSpecific("vida").getPorcentage();
+        
+        float meAttack = currentContext.getMeStatsSpecific("ataque").getCurrentValue();
+
+        //calculate the attack effectiveness
+        float attackEfectiveness = (meAttack - (enemyDefense >= meAttack ? meAttack : enemyDefense)) / meAttack;
+
+        finalUsefulness = ((1 - enemyHealtPorcentage) + attackEfectiveness) / 2;
+
+        return finalUsefulness;
     };
 
     @Override

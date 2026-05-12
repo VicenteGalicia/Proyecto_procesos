@@ -1,6 +1,5 @@
 package Batalla.Visual;
 
-import Batalla.Datos.Personaje;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;

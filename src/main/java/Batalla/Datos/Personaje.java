@@ -2,6 +2,7 @@ package Batalla.Datos;
 import javafx.beans.property.*;
 import Utility_IA.AttackAction;
 import Utility_IA.BattleContext;
+import Utility_IA.CriticalAttackAction;
 import Utility_IA.DefenderAction;
 import Utility_IA.FleeAction;
 import Utility_IA.PlayerAction;
@@ -46,8 +47,9 @@ public abstract class Personaje
 
         //add actions to actions array
         this.actions.put("Atacar", new AttackAction());
-        this.actions.put("Huir", new FleeAction());
+        //this.actions.put("Huir", new FleeAction());
         this.actions.put("Defenderse", new DefenderAction());
+        this.actions.put("Ataque Critico", new CriticalAttackAction());
 
         this.currentAction = null;
 
@@ -103,6 +105,14 @@ public abstract class Personaje
         vida.set(Math.max(0,nuevaVida));
     }
 
+    public void setFlee(Boolean isFlee){
+        isHuyendo = isFlee;
+    }
+
+    public Boolean getIsFlee(){
+        return isHuyendo;
+    }
+
     public boolean estaVivo()
     {
         Boolean isAlive = vida.get() > 0; 
@@ -122,15 +132,16 @@ public abstract class Personaje
     public void chooseAction(BattleContext currentContext) {
         PlayerAction bestAction = null;
         float bestUsefulness = -1;
-       
+        System.out.println("Utilidades de " + getNombre() + ": ");
         for(PlayerAction action: actions.values()){
             float currentUsefulness = action.calculateUsefulness(currentContext);
+            System.out.println(action.toString() + " = " + currentUsefulness);
             if(currentUsefulness > bestUsefulness){
                 bestUsefulness = currentUsefulness;
                 bestAction = action;
             }
         }
-
+        System.out.println();
         currentAction = bestAction;
     }
 

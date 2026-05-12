@@ -10,7 +10,21 @@ public class DefenderAction extends PlayerAction {
 
     @Override
     public float calculateUsefulness(BattleContext currentContext){
-        return (float)Math.random();
+        float finalUsefulness = 0.f;
+
+        float meMaxHealt = currentContext.getMeStatsSpecific("vida").getMaxValue();
+        float meCurrentDefense = currentContext.getMeStatsSpecific("defensa").getCurrentValue();
+        float meCurrentHealt = currentContext.getMeStatsSpecific("vida").getCurrentValue();
+
+        float enemyCurrentAttack = currentContext.getEnemyStatsSpecific("ataque").getCurrentValue();
+
+        float maxSurvivalPer = meMaxHealt / (enemyCurrentAttack - (meCurrentDefense >= enemyCurrentAttack ? enemyCurrentAttack - 1 : meCurrentDefense));
+
+        float survivalPer = meCurrentHealt / (enemyCurrentAttack - (meCurrentDefense >= enemyCurrentAttack ? enemyCurrentAttack - 1 : meCurrentDefense));
+
+        finalUsefulness =  1 - (survivalPer / maxSurvivalPer);
+
+        return finalUsefulness;
     }
 
     @Override 

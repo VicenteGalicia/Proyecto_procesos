@@ -2,8 +2,6 @@ package Batalla;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
-import com.almasb.fxgl.entity.Entity;
-import javafx.animation.Animation;
 import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -32,11 +30,6 @@ public class PruebaAssets extends GameApplication
         animacion.setScaleY(2);
 
         animacion.play();
-
-        Entity caballero = entityBuilder()
-                .at(400 - 48, 300 - 42)
-                .view(animacion)
-                .buildAndAttach();
     }
 
     public static void main(String[]args)

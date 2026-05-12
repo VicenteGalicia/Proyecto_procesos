@@ -1,23 +1,23 @@
 package Utility_IA;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import Batalla.Datos.stats.PlayerStat;
 
 public class BattleContext {
-    private ArrayList<PlayerStat> _enemyStats = new ArrayList<PlayerStat>();
-    private ArrayList<PlayerStat> _meStats = new ArrayList<PlayerStat>();
+    private HashMap<String, PlayerStat> _enemyStats = new HashMap<String, PlayerStat>();
+    private HashMap<String, PlayerStat> _meStats = new HashMap<String, PlayerStat>();
     
-    public BattleContext(ArrayList<PlayerStat> enemyStats, ArrayList<PlayerStat> meStats){
+    public BattleContext(HashMap<String, PlayerStat> enemyStats, HashMap<String, PlayerStat> meStats){
         _enemyStats = enemyStats;
         _meStats = meStats;
     }
 
-    public ArrayList<PlayerStat> getMeStats(){
-        return _meStats;
+    public PlayerStat getMeStatsSpecific(String key){
+        return _meStats.get(key);
     }
 
-    public ArrayList<PlayerStat> getEnemyStats(){
-        return _enemyStats;
+    public PlayerStat getEnemyStatsSpecific(String key){
+        return _enemyStats.get(key);
     }
 }

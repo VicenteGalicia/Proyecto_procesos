@@ -14,7 +14,25 @@ public class CriticalAttackAction extends PlayerAction{
 
     @Override
     public float calculateUsefulness(BattleContext currentContext){
-        return (float)Math.random();
+        float finalUsefulness = 0.f;
+
+        //normalized values
+        float criticalProbability = currentContext.getMeStatsSpecific("Pcritico").getCurrentValue();
+        float enemyDefense = currentContext.getEnemyStatsSpecific("defensa").getCurrentValue();
+        float enemyHealtPorcentage = currentContext.getEnemyStatsSpecific("vida").getPorcentage();
+        
+        float meAttack = currentContext.getMeStatsSpecific("ataque").getCurrentValue();
+
+        //calculate the attack effectiveness
+        float attackEfectiveness = (meAttack - (enemyDefense >= meAttack ? meAttack : enemyDefense )) / meAttack;
+
+        finalUsefulness = (enemyHealtPorcentage + attackEfectiveness) / 2;
+
+        if(Math.random() < criticalProbability){
+            finalUsefulness += 0.01;
+        }
+
+        return finalUsefulness;
     };
 
     @Override

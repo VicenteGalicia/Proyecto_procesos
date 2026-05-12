@@ -19,4 +19,8 @@ public abstract class PlayerAction {
     public abstract void executeAction(Personaje me, Personaje opponent);
 
     public abstract void updateTexture(PersonajeVisual texture);
+
+    public String toString(){
+        return name;
+    }
 }
