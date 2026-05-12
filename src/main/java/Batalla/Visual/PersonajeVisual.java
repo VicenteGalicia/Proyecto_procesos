@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonajeVisual extends Component {
-    private Personaje datos;
+    private Boolean isDead = false;
     private AnimatedTexture currentTexture;
     private String tipoPersonaje;
     private Map<String, AnimatedTexture> animaciones = new HashMap<>();
@@ -18,8 +18,7 @@ public class PersonajeVisual extends Component {
     private double escalaY = 1;
     private boolean estaMuerto = false;
 
-    public PersonajeVisual(Personaje datos, String tipoPersonaje) {
-        this.datos = datos;
+    public PersonajeVisual(String tipoPersonaje) {
         this.tipoPersonaje = tipoPersonaje;
         cargarAnimaciones();
     }
@@ -37,6 +36,10 @@ public class PersonajeVisual extends Component {
 
         currentTexture = animaciones.get("idle");
         currentTexture.play();
+    }
+
+    public void setIsDead(Boolean isDead){
+        this.isDead = isDead;
     }
 
     private int getFrames(String animacion)
@@ -222,7 +225,7 @@ public class PersonajeVisual extends Component {
     public void animarAtaqueNormal() {
         if (!estaMuerto) {
             AnimatedTexture anim = animaciones.get("ataque1");
-            if (anim != null && datos.estaVivo()) {
+            if (anim != null && !isDead) {
                 cambiarTextura(anim);
                 anim.setOnCycleFinished(() -> {
                     anim.stop();
@@ -237,7 +240,7 @@ public class PersonajeVisual extends Component {
     public void animarAtaqueCritico() {
         if (!estaMuerto) {
             AnimatedTexture anim = animaciones.get("ataque2");
-            if (anim != null && datos.estaVivo()) {
+            if (anim != null && !isDead) {
                 cambiarTextura(anim);
                 anim.setOnCycleFinished(() -> {
                     anim.stop();
@@ -252,7 +255,7 @@ public class PersonajeVisual extends Component {
     public void animarRecibirDaño() {
         if (!estaMuerto) {
             AnimatedTexture anim = animaciones.get("hurt");
-            if (anim != null && datos.estaVivo()) {
+            if (anim != null && !isDead) {
                 cambiarTextura(anim);
                 anim.setOnCycleFinished(() -> {
                     anim.stop();
@@ -267,7 +270,7 @@ public class PersonajeVisual extends Component {
     public void animarDefensa() {
         if (!estaMuerto) {
             AnimatedTexture anim = animaciones.get("defensa");
-            if (anim != null && datos.estaVivo()) {
+            if (anim != null && !isDead) {
                 cambiarTextura(anim);
                 anim.setOnCycleFinished(() -> {
                     anim.stop();
@@ -282,7 +285,7 @@ public class PersonajeVisual extends Component {
     public void animarHuir() {
         if (!estaMuerto) {
             AnimatedTexture anim = animaciones.get("correr");
-            if (anim != null && datos.estaVivo()) {
+            if (anim != null && !isDead) {
                 cambiarTextura(anim);
                 anim.setOnCycleFinished(() -> {
                     anim.stop();
@@ -344,7 +347,7 @@ public class PersonajeVisual extends Component {
 
     private void volverAIdle() {
         //verificar doble: si esta muerto, NO volver a idle
-        if (!estaMuerto && datos.estaVivo()) {
+        if (!estaMuerto && !isDead) {
             AnimatedTexture idle = animaciones.get("idle");
             cambiarTextura(idle);
             idle.setOnCycleFinished(() -> {

@@ -1,37 +1,58 @@
 package Batalla.Datos;
 import javafx.beans.property.*;
+import Utility_IA.AttackAction;
+import Utility_IA.BattleContext;
+import Utility_IA.DefenderAction;
+import Utility_IA.FleeAction;
+import Utility_IA.PlayerAction;
+
+import java.util.HashMap;
+
+import Batalla.Datos.stats.PlayerStat;
+import Batalla.Visual.PersonajeVisual;
 
 public abstract class Personaje
 {
     //propiedades observables en la UI
-    protected final DoubleProperty vida=new SimpleDoubleProperty();
-    protected final StringProperty nombre=new SimpleStringProperty();
+    protected final DoubleProperty vida = new SimpleDoubleProperty();
+    protected final StringProperty nombre = new SimpleStringProperty();
+    private PersonajeVisual texture;
+    private Personaje opponent; 
 
-    //stats de todos los personajes
-    protected double vidaMaxima;
-    protected double ataque;
-    protected double defensa;
-    protected double velocidad;
-    protected double probabilidadCritico; //0.0 a 1
-    protected double probabilidadHuir; // 0.0 a 1
-    protected double probabilidadFallar; // 0.0 a 1
 
     protected boolean isHuyendo;
     private boolean defendiendo=false;
 
-    public Personaje(String nombre, double vidaMaxima, double ataque, double defensa,
-                     double velocidad, double probabilidadCritico, double probabilidadHuir,
-                     double probabilidadFallar)
+    private HashMap<String, PlayerStat> stats = new HashMap<String, PlayerStat>();
+
+    private HashMap<String, PlayerAction> actions = new HashMap<String, PlayerAction>();
+    private PlayerAction currentAction;
+
+    public Personaje(String nombre, float vidaMaxima, float ataque, float defensa,
+                     float velocidad, float probabilidadCritico, float probabilidadHuir,
+                     float probabilidadFallar)
     {
         this.nombre.set(nombre);
-        this.vidaMaxima=vidaMaxima;
         this.vida.set(vidaMaxima);
-        this.ataque=ataque;
-        this.defensa=defensa;
-        this.velocidad=velocidad;
-        this.probabilidadCritico=probabilidadCritico;
-        this.probabilidadHuir=probabilidadHuir;
-        this.probabilidadFallar=probabilidadFallar;
+
+        //add stast to stats array
+        this.stats.put("vida", new PlayerStat("vida", vidaMaxima, vidaMaxima));
+        this.stats.put("ataque",new PlayerStat("ataque", ataque, ataque));
+        this.stats.put("velocidad", new PlayerStat("velocidad", velocidad, velocidad));
+        this.stats.put("defensa", new PlayerStat("defensa", defensa, defensa));
+        this.stats.put("Pcritico", new PlayerStat("probabilidad de critico", probabilidadCritico, probabilidadCritico));
+        this.stats.put("Phuir", new PlayerStat("probabilidad de huir", probabilidadHuir, probabilidadHuir));
+        this.stats.put("Pfallar", new PlayerStat("probabilidad de fallar ataque", probabilidadFallar, probabilidadFallar));
+
+        //add actions to actions array
+        this.actions.put("Atacar", new AttackAction());
+        this.actions.put("Huir", new FleeAction());
+        this.actions.put("Defenderse", new DefenderAction());
+
+        this.currentAction = null;
+
+        this.texture = new PersonajeVisual(nombre.toLowerCase());
+        this.opponent = null;
     }
 
     //gets y sets
@@ -65,117 +86,8 @@ public abstract class Personaje
         return nombre;
     }
 
-    public void setVidaMaxima(double vidaMaxima)
-    {
-        this.vidaMaxima=vidaMaxima;
-    }
-
-    public double getVidaMaxima()
-    {
-        return vidaMaxima;
-    }
-
-    public void setAtaque(double ataque)
-    {
-        this.ataque=ataque;
-    }
-
-    public double getAtaque()
-    {
-        return ataque;
-    }
-
-    public void setDefensa(double defensa)
-    {
-        this.defensa=defensa;
-    }
-
-    public double getDefensa()
-    {
-        return defensa;
-    }
-
-    public void setVelocidad(double velocidad)
-    {
-        this.velocidad=velocidad;
-    }
-
-    public double getVelocidad()
-    {
-        return velocidad;
-    }
-
-    public void setProbabilidadCritico(double probabilidadCritico)
-    {
-        this.probabilidadCritico=probabilidadCritico;
-    }
-
-    public double getProbabilidadCritico()
-    {
-        return probabilidadCritico;
-    }
-
-    public void setProbabilidadHuir(double probabilidadHuir)
-    {
-        this.probabilidadHuir=probabilidadHuir;
-    }
-
-    public double getProbabilidadHuir()
-    {
-        return probabilidadHuir;
-    }
-
-    public void setHuyendo(boolean Huyendo)
-    {
-        isHuyendo=Huyendo;
-    }
-
-    public boolean getHuyendo()
-    {
-        return isHuyendo;
-    }
-
-    public void setDefendiendo(boolean defendiendo)
-    {
-        this.defendiendo=defendiendo;
-    }
-
-    public boolean isDefendiendo()
-    {
-        return defendiendo;
-    }
-
-    public void setProbabilidadFallar(double probabilidadFallar)
-    {
-        this.probabilidadFallar=probabilidadFallar;
-    }
-
-    public double getProbabilidadFallar()
-    {
-        return probabilidadFallar;
-    }
-
-    public double calculardamage(Personaje objetivo)
-    {
-        if(ataqueFalla())
-        {
-            System.out.println(nombre.get() + " ¡falló el ataque!");
-            return 0;
-        }
-        // Fórmula: (ataque * 2) - defensa, pero con variación aleatoria
-        int variacion = (int)(Math.random() * 10) - 5; // -5 a +4 de variación
-
-        double damageBase = (this.ataque * 1.5) - (objetivo.defensa * 0.8) + variacion;
-
-        if (damageBase < 5) {
-            damageBase = 5;
-        }
-
-        //aplicar critico
-        boolean esCritico = Math.random() < probabilidadCritico;
-        double damageFinal = esCritico ? damageBase * 1.8 : damageBase; // Crítico más fuerte
-
-        return Math.max(1, Math.round(damageFinal));
+    public void setOpponent(Personaje opponent){
+        this.opponent = opponent;
     }
 
     public void recibirDamage(double damage)
@@ -191,63 +103,55 @@ public abstract class Personaje
         vida.set(Math.max(0,nuevaVida));
     }
 
-    public boolean intentarHuir()
-    {
-        double porcentajeVida=vida.get()/vidaMaxima;
-        if(porcentajeVida<=0.99)
-        {
-            isHuyendo=Math.random()<probabilidadHuir;
-            return isHuyendo;
-        }
-        else
-        {
-            isHuyendo=false;
-            return false;
-        }
-    }
-
     public boolean estaVivo()
     {
-        return vida.get()>0;
+        Boolean isAlive = vida.get() > 0; 
+        texture.setIsDead(!isAlive);
+        return isAlive;
     }
 
-    public double getProbabilidadAtacar()
-    {
-        return 0.50;
+    public HashMap<String, PlayerStat> getStats(){
+        return stats;
     }
 
-    public double getProbabilidadDefender()
-    {
-        return 0.50;
+    public PersonajeVisual getTexture(){
+        return texture;
     }
 
-    public boolean ataqueFalla()
-    {
-        return Math.random() < probabilidadFallar;
-    }
-
-    public Accion decidirAccion() {
-        if (vida.get() / vidaMaxima <= 0.20)
-        {
-            if (Math.random() < probabilidadHuir)
-            {
-                return Accion.HUIR;
+    //calculate the usefulness of each pissible action and choose the best
+    public void chooseAction(BattleContext currentContext) {
+        PlayerAction bestAction = null;
+        float bestUsefulness = -1;
+       
+        for(PlayerAction action: actions.values()){
+            float currentUsefulness = action.calculateUsefulness(currentContext);
+            if(currentUsefulness > bestUsefulness){
+                bestUsefulness = currentUsefulness;
+                bestAction = action;
             }
         }
-        double random=Math.random();
 
-        if(random<getProbabilidadAtacar())
-        {
-            return Accion.ATACAR;
-        }
-        else
-        {
-            return Accion.DEFENDER;
-        }
+        currentAction = bestAction;
     }
 
+    //execute the current action
+    public void executeCurrentAction(){
+        System.out.print(getNombre() + " esta ");
+        if(currentAction != null)
+            currentAction.updateTexture(texture);
+            currentAction.executeAction(this, opponent);
+            setVida((double)stats.get("vida").getCurrentValue());
+    }
 
-
+    //print the stats
+    public void printStats(){
+        System.out.println("Stats de " + getNombre() + ": ");
+        for(PlayerStat stat: stats.values()){
+            System.out.println(stat.toString());
+        }
+        System.out.println();
+    }
+    
 }
 
 

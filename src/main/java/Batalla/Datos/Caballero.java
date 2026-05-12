@@ -5,13 +5,13 @@ public class Caballero extends Personaje
     public Caballero()
     {
         super("Caballero",
-                130,
-                22,
-                20,
-                1.2,
-                0.10,
-                0.05,
-                0.20);
+                (float)130,
+                (float)22,
+                (float)20,
+                (float)1.2,
+                (float)0.10,
+                (float)0.05,
+                (float)0.20);
 
     }
 }

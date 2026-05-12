@@ -5,12 +5,12 @@ public class Panda extends Personaje
     public Panda()
     {
         super("Panda",
-                130,
-                20,
-                25,
-                1,
-                0.10,
-                0.10,
-                0.40);
+                (float)130,
+                (float)20,
+                (float)25,
+                (float)1,
+                (float)0.10,
+                (float)0.10,
+                (float)0.40);
     }
 }

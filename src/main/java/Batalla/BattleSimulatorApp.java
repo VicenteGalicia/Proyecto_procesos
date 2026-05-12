@@ -182,11 +182,11 @@ public class BattleSimulatorApp extends GameApplication {
 
         FXGL.addUINode(vidaLabel2);
 
-        String tipo1 = getTipoSprite(jugador1);
-        String tipo2 = getTipoSprite(jugador2);
+        String tipo1 = jugador1.getNombre().toLowerCase();
+        String tipo2 = jugador2.getNombre().toLowerCase();
 
-        PersonajeVisual visual1 = new PersonajeVisual(jugador1, tipo1);
-        PersonajeVisual visual2 = new PersonajeVisual(jugador2, tipo2);
+        PersonajeVisual visual1 = jugador1.getTexture();
+        PersonajeVisual visual2 = jugador2.getTexture();
 
         //medio misma escala vertical
         double yPos1 = 600;  //para mover los luchadores
@@ -201,8 +201,6 @@ public class BattleSimulatorApp extends GameApplication {
 
         //guarda la escala
         visual1.setEscala(2.5, 2.5);
-
-
 
         double xPos2 = 700;
 
@@ -282,14 +280,14 @@ public class BattleSimulatorApp extends GameApplication {
 
         javafx.animation.Timeline updateUI = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(0.1), e -> {
-                    double porcentaje1 = jugador1.getVida() / jugador1.getVidaMaxima();
-                    double porcentaje2 = jugador2.getVida() / jugador2.getVidaMaxima();
+                    double porcentaje1 = jugador1.getVida() / jugador1.getStats().get("vida").getMaxValue();
+                    double porcentaje2 = jugador2.getVida() / jugador2.getStats().get("vida").getMaxValue();
 
                     barraVida1.setWidth(200 * porcentaje1);
                     barraVida2.setWidth(200 * porcentaje2);
 
-                    vidaTexto1.setText((int)jugador1.getVida() + "/" + (int)jugador1.getVidaMaxima());
-                    vidaTexto2.setText((int)jugador2.getVida() + "/" + (int)jugador2.getVidaMaxima());
+                    vidaTexto1.setText((int)jugador1.getVida() + "/" + (int)jugador1.getStats().get("vida").getMaxValue());
+                    vidaTexto2.setText((int)jugador2.getVida() + "/" + (int)jugador2.getStats().get("vida").getMaxValue());
                 })
         );
         updateUI.setCycleCount(javafx.animation.Timeline.INDEFINITE);
@@ -331,11 +329,6 @@ public class BattleSimulatorApp extends GameApplication {
 
         FXGL.addUINode(revancha);
         FXGL.addUINode(salir);
-    }
-
-    private String getTipoSprite(Personaje personaje)
-    {
-        return personaje.getClass().getSimpleName().toLowerCase();
     }
 
     public static void main(String[] args) {

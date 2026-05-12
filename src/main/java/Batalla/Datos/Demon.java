@@ -5,12 +5,12 @@ public class Demon extends Personaje
     public Demon()
     {
         super("Demon",
-                110,
-                25,
-                10,
-                1,
-                0.10,
-                0.15,
-                0.40);
+                (float)110,
+                (float)25,
+                (float)10,
+                (float)1,
+                (float)0.10,
+                (float)0.15,
+                (float)0.40);
     }
 }

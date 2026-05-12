@@ -6,8 +6,8 @@ import com.almasb.fxgl.entity.Entity;
 
 public class EntityFactory {
 
-    public static Entity crearPersonajeVisual(Personaje datos, String tipo, double x, double y) {
-        PersonajeVisual visual = new PersonajeVisual(datos, tipo);
+    public static Entity crearPersonajeVisual(PersonajeVisual texture, String tipo, double x, double y) {
+        PersonajeVisual visual = texture;
 
         return FXGL.entityBuilder()
                 .at(x, y)
