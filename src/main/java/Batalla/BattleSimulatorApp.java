@@ -294,6 +294,16 @@ public class BattleSimulatorApp extends GameApplication {
         updateUI.play();
 
         simulador.setOnBatallaTerminada(() -> {
+            // Forzar actualización final antes de detener
+            double porcentaje1 = jugador1.getVida() / jugador1.getStats().get("vida").getMaxValue();
+            double porcentaje2 = jugador2.getVida() / jugador2.getStats().get("vida").getMaxValue();
+
+            barraVida1.setWidth(200 * porcentaje1);
+            barraVida2.setWidth(200 * porcentaje2);
+
+            vidaTexto1.setText((int) jugador1.getVida() + "/" + (int) jugador1.getStats().get("vida").getMaxValue());
+            vidaTexto2.setText((int) jugador2.getVida() + "/" + (int) jugador2.getStats().get("vida").getMaxValue());
+
             updateUI.stop();
             mostrarBotonRevancha();
         });
